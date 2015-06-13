@@ -6,6 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask import render_template, request, url_for, redirect, flash
 # import datetime
 import json
+from pprint import pprint as pp
 
 app = flask.Flask(__name__, static_folder='./public', static_url_path='')
 
@@ -46,8 +47,24 @@ def index():
     return render_template('index.html')
 
 @app.route("/pay")
-def pay():
+def pay_first_stage():
     return render_template('paymill.html')
+
+@app.route("/user", methods=['POST'])
+def user_transaction():
+
+    pp(request.form)
+    #form = user_form(request.form)
+    # user = User(form.username.data, form.email.data,
+    #             form.password.data, form.github_url.data)
+    # db.session.add(user)
+    # db.session.commit()
+    # flash('Thanks for registering')
+    # login_user(user)
+    return "hello" #redirect(url_for('user_view', user_id=user.id))
+
+    return render_template('user_register_view.html', form=form)
+
 
 @app.route("/test")
 def test():

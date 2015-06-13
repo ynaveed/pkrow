@@ -45,7 +45,8 @@
       </div>
     </div>
     <div>
-        <form id="payment-form" action="#" method="POST">
+        <form id="payment-form" action="{{url_for("user_transaction")}}" method="POST">
+             method=post
             <input class="card-amount-int" type="hidden" value="15" />
             <input class="card-currency" type="hidden" value="EUR" />
           <div class="row">
