@@ -8,7 +8,7 @@ from flask import render_template, request, url_for, redirect, flash
 import json
 from pprint import pprint as pp
 
-app = flask.Flask(__name__, static_folder='./public', static_url_path='')
+app = flask.Flask(__name__, static_folder='./public_folder', static_url_path='')
 
 app.config['SECRET_KEY'] = 'test'
 app.config['SQLALCHEMY_ECHO'] = True
