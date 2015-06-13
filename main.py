@@ -7,6 +7,7 @@ from flask import render_template, request, url_for, redirect, flash
 # import datetime
 import json
 from pprint import pprint as pp
+import paymill
 
 app = flask.Flask(__name__, static_folder='./public_folder', static_url_path='')
 
@@ -15,6 +16,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/dan/University/projects/trust/database.db'
 
+PRIVATE_KEY = 'db0957a0c5ce4fb9189c3110af58cd03'
 
 db = SQLAlchemy(app)
 
@@ -33,6 +35,22 @@ class User(db.Model):
     
     def __repr__(self):
         return '<User %r>' % self.username
+
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    paymill_id = db.Column(db.String(120))
+    amount = db.Column(db.Integer)
+    currency = db.Column(db.String(120))
+    user_id = db.Column(db.Integer)
+
+    def __init__(self, paymill_id, amount, currency, user_id=1):
+        self.paymill_id = paymill_id
+        self.amount = amount
+        self.currency = currency
+        self.user_id = user_id
+
+    def __repr__(self):
+        return '<Transaction %r>' % self.paymill_id
 
 
 @app.route("/user/<int:user_id>")
@@ -53,17 +71,28 @@ def pay_first_stage():
 @app.route("/user", methods=['POST'])
 def user_transaction():
 
-    pp(request.form)
-    #form = user_form(request.form)
-    # user = User(form.username.data, form.email.data,
-    #             form.password.data, form.github_url.data)
-    # db.session.add(user)
-    # db.session.commit()
-    # flash('Thanks for registering')
-    # login_user(user)
-    return "hello" #redirect(url_for('user_view', user_id=user.id))
+    # Everything works only for one user for demosntration.
 
-    return render_template('user_register_view.html', form=form)
+    token = request.form.get('token')
+    amount = request.form.get('amount')
+    currency = request.form.get('currency')
+    context = paymill.PaymillContext(PRIVATE_KEY)
+    transaction = context.transaction_service.create_with_token(token=token,
+                                                                amount=amount,
+                                                                currency=currency,
+                                                                description='test')
+    if transaction.status == 'closed':
+        print transaction.id
+        new_transaction = Transaction(paymill_id=transaction.id,
+                                      amount=amount,
+                                      currency=currency,
+                                      user_id=1)
+
+        db.session.add(new_transaction)
+        db.session.commit()
+        return json.dumps({'status': '200 ok'})
+
+    return json.dumps({'status': '500'})
 
 
 @app.route("/test")

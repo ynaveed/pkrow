@@ -46,13 +46,12 @@
     </div>
     <div>
         <form id="payment-form" action="{{url_for("user_transaction")}}" method="POST">
-             method=post
-            <input class="card-amount-int" type="hidden" value="15" />
-            <input class="card-currency" type="hidden" value="EUR" />
+            <input name="amount" class="card-amount-int" type="hidden" value="15" />
+            <input name="currency" class="card-currency" type="hidden" value="EUR" />
           <div class="row">
             <div class="six columns">
               <label>Card number</label>
-              <input class="u-full-width card-number" type="text" size="20" />
+              <input name="card" class="u-full-width card-number" type="text" size="20" />
             </div>
           </div>
 
@@ -83,7 +82,7 @@
             <input type="checkbox">
             <span class="label-body">Send a copy to yourself</span>
           </label>
-            <input id="token" class="token" type="text" hidden="true">
+            <input name="token" id="token" class="token" type="text" hidden="true">
         </form>
 
         <input class="button-primary submit-button" type="submit" value="Submit">
