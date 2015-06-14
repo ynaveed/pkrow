@@ -42,6 +42,7 @@ class Transaction(db.Model):
     amount = db.Column(db.Integer)
     currency = db.Column(db.String(120))
     user_id = db.Column(db.Integer)
+    receiver_id = db.Column(db.Integer)
 
     def __init__(self, paymill_id, amount, currency, user_id=1):
         self.paymill_id = paymill_id
@@ -92,7 +93,6 @@ def pay_second_stage():
                                                                 amount=amount,
                                                                 currency=currency,
                                                               description='test')
-
 
     if transaction.status == 'closed':
         print transaction.id
