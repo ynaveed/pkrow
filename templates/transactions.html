@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title></title>
+  <title>Your page title here :)</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -32,6 +32,30 @@
   </script>
   <script type="text/javascript" src="https://bridge.paymill.com/"></script>
 
+  <style>
+    a.button{
+      display: inline-block;
+      height: 38px;
+      margin-bottom: 0px;
+      padding: 0 30px;
+      color: #555;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 38px;
+      letter-spacing: .1rem;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      background-color: transparent;
+      border-radius: 4px;
+      border: 1px solid #bbb;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+  </style>
+
 </head>
 <body>
 
@@ -40,56 +64,43 @@
   <div class="container">
     <div class="row">
       <div class="one-half column" style="margin-top: 25%">
-        <h4>Secure payment with <i style="color:orange;">Paymill</i></h4>
-        <p>Direct Debit</p>
+        <h4>Transactions</h4>
+
       </div>
     </div>
-    <div>
-        <form id="payment-form" action="{{url_for("pay_second_stage")}}" method="POST">
-            <input name="amount" class="card-amount-int" type="hidden" value="15" />
-            <input name="currency" class="card-currency" type="hidden" value="EUR" />
-          <div class="row">
-            <div class="six columns">
-              <label>Card number</label>
-              <input name="card" class="u-full-width card-number" type="text" size="20" />
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="six columns">
-              <label>Name</label>
-              <input class="card-holdername u-full-width" type="text" size="4" />
-            </div>
 
-          </div>
-          <div class="row">
-            <div class="six columns">
-              <label>CVC</label>
-              <input class="card-cvc" type="text" size="4" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="six columns">
-              <label>Expiry date (MM/YYYY)</label>
-              <input class="card-expiry-month" type="text" size="2" />
-              <span></span>
-              <input class="card-expiry-year" type="text" size="4" />
-            </div>
-          </div>
-
-          <label class="example-send-yourself-copy">
-            <input type="checkbox">
-            <span class="label-body">Send a copy to yourself</span>
-          </label>
-            <input name="token" id="token" class="token" type="text" hidden="true">
-            <input name="amount" id="amount" type="text" hidden="true" value="{{ amount }}">
-            <input name="escrow_days" id="escrow_days" type="text" hidden="true" value="{{ escrow_days }}">
-        </form>
-
-        <input class="button-primary submit-button" type="submit" value="Submit">
-
-    </div>
+    <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Amount <i>(EUR)</i></th>
+        <th>Transaction Date</th>
+        <th>Escrow End</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Dave Gamache</td>
+        <td>200</td>
+        <td>02/01/2015</td>
+        <td>05/03/2015</td>
+        <td>
+          <a class="button">Manage</a>
+        </td>
+      </tr>
+      <tr>
+        <td>Dave Gamache</td>
+        <td>200</td>
+        <td>02/01/2015</td>
+        <td>05/03/2015</td>
+        <td>
+          <a class="button">Manage</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   </div>
 
 <!-- End Document
