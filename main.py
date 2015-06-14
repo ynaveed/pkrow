@@ -25,10 +25,9 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
+    stars = db.Column(db.Integer)
 
-    #projects = db.relationship("ProjectProposal", backref="author")
-    
-    def __init__(self, username="", email="", password=""):
+    def __init__(self, username="", email="", password="", stars=5):
         self.username = username
         self.email = email
         self.password = password
@@ -44,11 +43,12 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer)
     receiver_id = db.Column(db.Integer)
 
-    def __init__(self, paymill_id, amount, currency, user_id=1):
+    def __init__(self, paymill_id, amount, currency, user_id=1, receiver_id=2):
         self.paymill_id = paymill_id
         self.amount = amount
         self.currency = currency
         self.user_id = user_id
+        self.receiver_id = receiver_id
 
     @property
     def serialize(self):
@@ -59,6 +59,7 @@ class Transaction(db.Model):
            'amount': self.amount,
            'currency': self.currency,
            'author_id': self.user_id,
+           'receiver_id': self.receiver_id
        }
 
     def __repr__(self):
@@ -72,15 +73,21 @@ def user_view(user_id):
     
     return render_template('user_view.html', user=user)
 
-@app.route("/")
+@app.route("/pay_receiver")
 def index():
-    return render_template('index.html')
+    return render_template('pay_receiver.html')
 
-@app.route("/pay")
+@app.route("/pay_bank_details", methods=['POST', 'GET'])
 def pay_first_stage():
-    return render_template('paymill.html')
 
-@app.route("/transaction", methods=['POST'])
+    amount = request.form.get('amount')
+    escrow_days = request.form.get('escrow_days')
+
+    return render_template('pay_bank_details.html',
+                           amount=amount,
+                           escrow_days=escrow_days)
+
+@app.route("/transaction_run", methods=['POST'])
 def pay_second_stage():
 
     # Everything works only for one user for demosntration.
@@ -92,8 +99,7 @@ def pay_second_stage():
     transaction = context.transaction_service.create_with_token(token=token,
                                                                 amount=amount,
                                                                 currency=currency,
-                                                              description='test')
-
+                                                                description='test')
     if transaction.status == 'closed':
         print transaction.id
         new_transaction = Transaction(paymill_id=transaction.id,
@@ -103,25 +109,25 @@ def pay_second_stage():
 
         db.session.add(new_transaction)
         db.session.commit()
-        return json.dumps({'status': '200 ok'})
+        flash('Transaction was successful. Going to transaction page.')
+        return redirect(url_for('view_transactions'))
 
-    return json.dumps({'status': '500'})
+    flash("Transaction wasn't successful. Try once again")
+    return redirect(url_for('pay_first_stage'))
 
-@app.route("/transactions")
+@app.route("/transactions_view")
 def view_transactions():
     return render_template('transactions.html')
 
+    receiver = User.query.filter_by(id=1).first()
     transactions = Transaction.query.all()
-    return jsonify(transactions=[t.serialize for t in transactions])
-
+    return render_template('transactions_view.html',
+                           transactions=transactions,
+                           receiver=receiver)
 
 @app.route("/manage")
 def manage_transaction():
     return render_template('manage_transaction.html')
-
-@app.route("/test")
-def test():
-    return json.dumps([1, 2, 3])
 
 
 if __name__ == "__main__":

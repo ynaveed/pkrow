@@ -39,25 +39,25 @@
       </div>
     </div>
     <div>
-        <form>
+        <form action="{{url_for("pay_first_stage")}}" method="POST">
           <div class="row">
             <div class="six columns">
               <label for="amount">Amount</label>
-              <input class="u-full-width" type="text" id="amount">
+              <input name="amount" class="u-full-width" type="text" id="amount">
             </div>
           </div>
 
           <div class="row">
             <div class="six columns">
               <label for="payee">Payee</label>
-              <input class="u-full-width" type="text" id="payee">
+              <input class="u-full-width" type="text" id="payee" value="Areeb">
             </div>
           </div>
 
           <div class="row">
             <div class="six columns">
               <label for="escrowDays">Escrow Duration (in days)</label>
-              <input class="u-full-width" type="text" id="escrowDays">
+              <input name="escrow_days" class="u-full-width" type="text" id="escrowDays">
             </div>
           </div>
           <input class="button-primary" type="submit" value="Submit">
