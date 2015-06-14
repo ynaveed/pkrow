@@ -109,10 +109,15 @@ def pay_second_stage():
 
 @app.route("/transactions")
 def view_transactions():
+    return render_template('transactions.html')
 
     transactions = Transaction.query.all()
     return jsonify(transactions=[t.serialize for t in transactions])
 
+
+@app.route("/manage")
+def manage_transaction():
+    return render_template('manage_transaction.html')
 
 @app.route("/test")
 def test():
