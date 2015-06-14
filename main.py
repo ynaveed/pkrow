@@ -3,7 +3,7 @@ import flask
 # from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.sqlalchemy import SQLAlchemy
 # from wtforms.ext.sqlalchemy.orm import model_form
-from flask import render_template, request, url_for, redirect, flash
+from flask import render_template, request, url_for, redirect, flash, jsonify
 # import datetime
 import json
 from pprint import pprint as pp
@@ -49,6 +49,17 @@ class Transaction(db.Model):
         self.currency = currency
         self.user_id = user_id
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'id'         : self.id,
+           'paymill_id': self.paymill_id,
+           'amount': self.amount,
+           'currency': self.currency,
+           'author_id': self.user_id,
+       }
+
     def __repr__(self):
         return '<Transaction %r>' % self.paymill_id
 
@@ -68,8 +79,8 @@ def index():
 def pay_first_stage():
     return render_template('paymill.html')
 
-@app.route("/user", methods=['POST'])
-def user_transaction():
+@app.route("/transaction", methods=['POST'])
+def pay_second_stage():
 
     # Everything works only for one user for demosntration.
 
@@ -80,7 +91,9 @@ def user_transaction():
     transaction = context.transaction_service.create_with_token(token=token,
                                                                 amount=amount,
                                                                 currency=currency,
-                                                                description='test')
+                                                              description='test')
+
+
     if transaction.status == 'closed':
         print transaction.id
         new_transaction = Transaction(paymill_id=transaction.id,
@@ -93,6 +106,12 @@ def user_transaction():
         return json.dumps({'status': '200 ok'})
 
     return json.dumps({'status': '500'})
+
+@app.route("/transactions")
+def view_transactions():
+
+    transactions = Transaction.query.all()
+    return jsonify(transactions=[t.serialize for t in transactions])
 
 
 @app.route("/test")
