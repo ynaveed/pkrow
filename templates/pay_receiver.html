@@ -26,12 +26,6 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <script type="text/javascript" src="js/jquery-2.1.4.js"></script>
-  <script type="text/javascript">
-    var PAYMILL_PUBLIC_KEY = '77835649219e780c7d9eb96873fbf5f4';
-  </script>
-  <script type="text/javascript" src="https://bridge.paymill.com/"></script>
-
 </head>
 <body>
 
@@ -40,41 +34,30 @@
   <div class="container">
     <div class="row">
       <div class="one-half column" style="margin-top: 25%">
-        <h4>Secure payment with <i style="color:orange;">Paymill</i></h4>
-        <p>Direct Debit</p>
+        <h4>Welcome to ScheiseCrow</h4>
+        <p>Here you can easily put your shit into escrow. We make sure that your shit is secure, and that you are protected from shit fraud.</p>
       </div>
     </div>
     <div>
-        <form id="payment-form" action="{{url_for("pay_second_stage")}}" method="POST">
-            <input name="amount" class="card-amount-int" type="hidden" value="15" />
-            <input name="currency" class="card-currency" type="hidden" value="EUR" />
+        <form action="{{url_for("pay_first_stage")}}" method="POST">
           <div class="row">
             <div class="six columns">
-              <label>Card number</label>
-              <input name="card" class="u-full-width card-number" type="text" size="20" />
+              <label for="amount">Amount</label>
+              <input name="amount" class="u-full-width" type="text" id="amount">
             </div>
           </div>
 
           <div class="row">
             <div class="six columns">
-              <label>Name</label>
-              <input class="card-holdername u-full-width" type="text" size="4" />
-            </div>
-
-          </div>
-          <div class="row">
-            <div class="six columns">
-              <label>CVC</label>
-              <input class="card-cvc" type="text" size="4" />
+              <label for="payee">Payee</label>
+              <input class="u-full-width" type="text" id="payee" value="Areeb">
             </div>
           </div>
 
           <div class="row">
             <div class="six columns">
-              <label>Expiry date (MM/YYYY)</label>
-              <input class="card-expiry-month" type="text" size="2" />
-              <span></span>
-              <input class="card-expiry-year" type="text" size="4" />
+              <label for="escrowDays">Escrow Days</label>
+              <input name="escrow_days" class="u-full-width" type="text" id="escrowDays">
             </div>
           </div>
 
@@ -82,17 +65,12 @@
             <input type="checkbox">
             <span class="label-body">Send a copy to yourself</span>
           </label>
-            <input name="token" id="token" class="token" type="text" hidden="true">
+          <input class="button-primary" type="submit" value="Submit">
         </form>
-
-        <input class="button-primary submit-button" type="submit" value="Submit">
-
     </div>
   </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
-<script type="text/javascript" src="js/payment.js"></script>
-
 </html>
