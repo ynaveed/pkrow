@@ -117,17 +117,18 @@ def pay_second_stage():
 
 @app.route("/transactions_view")
 def view_transactions():
-    return render_template('transactions.html')
 
-    receiver = User.query.filter_by(id=1).first()
+    receiver = User.query.filter_by(id=2).first()
     transactions = Transaction.query.all()
     return render_template('transactions_view.html',
                            transactions=transactions,
                            receiver=receiver)
 
-@app.route("/manage")
-def manage_transaction():
-    return render_template('manage_transaction.html')
+@app.route("/manage/<int:transaction_id>/")
+def manage_transaction(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+    return render_template('manage_transaction.html',
+                           transaction=transaction)
 
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@
     </div>
     <div>
         <form id="payment-form" action="{{url_for("pay_second_stage")}}" method="POST">
-            <input name="amount" class="card-amount-int" type="hidden" value="15" />
+            <input name="amount" class="card-amount-int" type="hidden" value="{{amount}}" />
             <input name="currency" class="card-currency" type="hidden" value="EUR" />
           <div class="row">
             <div class="six columns">
